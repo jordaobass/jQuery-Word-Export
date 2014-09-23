@@ -23,6 +23,8 @@ if (typeof jQuery !== "undefined" && typeof saveAs !== "undefined") {
             });
 
             // Embed all images using Data URLs
+			
+				
             var images = Array();
             var img = markup.find('img');
             for (var i = 0; i < img.length; i++) {
@@ -30,15 +32,19 @@ if (typeof jQuery !== "undefined" && typeof saveAs !== "undefined") {
                 var w = Math.min(img[i].width, options.maxWidth);
                 var h = img[i].height * (w / img[i].width);
                 // Create canvas for converting image to data URL
-                $('<canvas>').attr("id", "jQuery-Word-export_img_" + i).width(w).height(h).insertAfter(img[i]);
-                var canvas = document.getElementById("jQuery-Word-export_img_" + i);
-                canvas.width = w;
-                canvas.height = h;
-                // Draw image to canvas
-                var context = canvas.getContext('2d');
+       
+			var idcanvas = "CANVAS"+i;
+			var x = document.createElement("CANVAS");
+	
+		
+		  // Draw image to canvas
+                var context = x.getContext('2d');
+				
                 context.drawImage(img[i], 0, 0, w, h);
+				
                 // Get data URL encoding of image
-                var uri = canvas.toDataURL();
+                var uri = x.toDataURL("image/png");
+			
                 $(img[i]).attr("src", img[i].src);
                 img[i].width = w;
                 img[i].height = h;
@@ -49,8 +55,7 @@ if (typeof jQuery !== "undefined" && typeof saveAs !== "undefined") {
                     location: $(img[i]).attr("src"),
                     data: uri.substring(uri.indexOf(",") + 1)
                 };
-                // Remove canvas now that we no longer need it
-                canvas.parentNode.removeChild(canvas);
+            
             }
 
             // Prepare bottom of mhtml file with image data
